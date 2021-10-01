@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'config/constant.dart';
-import 'view/home_page.dart';
+import 'common/app_route.dart';
 
-void main() {
-  runApp(
-    MainApp(),
-  );
-}
+void main() => runApp(const MainApp());
 
 class MainApp extends StatelessWidget {
-  final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
-    Constant.homeRoute: (BuildContext context) {
-      return HomePage();
-    },
-  };
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: _routes,
-      initialRoute: Constant.homeRoute,
+      routes: AppRoute.routes,
     );
   }
 }

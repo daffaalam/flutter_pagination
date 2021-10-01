@@ -1,44 +1,40 @@
 import 'dart:convert';
 
 class YuGiOh {
-  List<Datum> data;
-  Meta meta;
-
   YuGiOh({
-    this.data,
+    this.data = const <Datum>[],
     this.meta,
   });
 
-  factory YuGiOh.fromJson(String str) => YuGiOh.fromMap(json.decode(str));
+  List<Datum> data;
+  Meta? meta;
 
-  String toJson() => json.encode(toMap());
+  factory YuGiOh.fromJson(String str) {
+    return YuGiOh.fromMap(json.decode(str));
+  }
 
-  factory YuGiOh.fromMap(Map<String, dynamic> json) => YuGiOh(
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
-    meta: Meta.fromMap(json["meta"]),
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "data": List<dynamic>.from(data.map((x) => x.toMap())),
-    "meta": meta.toMap(),
-  };
+  factory YuGiOh.fromMap(Map<String, dynamic> json) {
+    return YuGiOh(
+      data: List<Datum>.from(json["data"].map((x) {
+        return Datum.fromMap(x);
+      })),
+      meta: Meta.fromMap(json["meta"]),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "data": List<dynamic>.from(data.map((x) => x.toMap())),
+      "meta": meta?.toMap(),
+    };
+  }
 }
 
 class Datum {
-  int id;
-  String name;
-  String type;
-  String desc;
-  String race;
-  String archetype;
-  List<CardImage> cardImages;
-  List<CardPrice> cardPrices;
-  List<CardSet> cardSets;
-  int atk;
-  int def;
-  int level;
-  String attribute;
-
   Datum({
     this.id,
     this.name,
@@ -46,123 +42,211 @@ class Datum {
     this.desc,
     this.race,
     this.archetype,
+    this.cardSets,
     this.cardImages,
     this.cardPrices,
-    this.cardSets,
     this.atk,
     this.def,
     this.level,
     this.attribute,
+    this.banlistInfo,
   });
 
-  factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+  int? id;
+  String? name;
+  String? type;
+  String? desc;
+  String? race;
+  String? archetype;
+  List<CardSet>? cardSets;
+  List<CardImage>? cardImages;
+  List<CardPrice>? cardPrices;
+  int? atk;
+  int? def;
+  int? level;
+  String? attribute;
+  BanlistInfo? banlistInfo;
 
-  String toJson() => json.encode(toMap());
+  factory Datum.fromJson(String str) {
+    return Datum.fromMap(json.decode(str));
+  }
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    type: json["type"],
-    desc: json["desc"],
-    race: json["race"],
-    archetype: json["archetype"] == null ? null : json["archetype"],
-    cardImages: List<CardImage>.from(json["card_images"].map((x) => CardImage.fromMap(x))),
-    cardPrices: List<CardPrice>.from(json["card_prices"].map((x) => CardPrice.fromMap(x))),
-    cardSets: json["card_sets"] == null ? null : List<CardSet>.from(json["card_sets"].map((x) => CardSet.fromMap(x))),
-    atk: json["atk"] == null ? null : json["atk"],
-    def: json["def"] == null ? null : json["def"],
-    level: json["level"] == null ? null : json["level"],
-    attribute: json["attribute"] == null ? null : json["attribute"],
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "id": id,
-    "name": name,
-    "type": type,
-    "desc": desc,
-    "race": race,
-    "archetype": archetype == null ? null : archetype,
-    "card_images": List<dynamic>.from(cardImages.map((x) => x.toMap())),
-    "card_prices": List<dynamic>.from(cardPrices.map((x) => x.toMap())),
-    "card_sets": cardSets == null ? null : List<dynamic>.from(cardSets.map((x) => x.toMap())),
-    "atk": atk == null ? null : atk,
-    "def": def == null ? null : def,
-    "level": level == null ? null : level,
-    "attribute": attribute == null ? null : attribute,
-  };
+  factory Datum.fromMap(Map<String, dynamic> json) {
+    return Datum(
+      id: json["id"],
+      name: json["name"],
+      type: json["type"],
+      desc: json["desc"],
+      race: json["race"],
+      archetype: json["archetype"],
+      cardSets: json["card_sets"] == null
+          ? null
+          : List<CardSet>.from(
+              json["card_sets"].map((x) => CardSet.fromMap(x)),
+            ),
+      cardImages: json["card_images"] == null
+          ? null
+          : List<CardImage>.from(
+              json["card_images"].map((x) => CardImage.fromMap(x)),
+            ),
+      cardPrices: json["card_prices"] == null
+          ? null
+          : List<CardPrice>.from(
+              json["card_prices"].map((x) => CardPrice.fromMap(x)),
+            ),
+      atk: json["atk"],
+      def: json["def"],
+      level: json["level"],
+      attribute: json["attribute"],
+      banlistInfo: json["banlist_info"] == null
+          ? null
+          : BanlistInfo.fromMap(json["banlist_info"]),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "id": id,
+      "name": name,
+      "type": type,
+      "desc": desc,
+      "race": race,
+      "archetype": archetype,
+      "card_sets": cardSets == null
+          ? null
+          : List<dynamic>.from(cardSets!.map((x) => x.toMap())),
+      "card_images": cardImages == null
+          ? null
+          : List<dynamic>.from(cardImages!.map((x) => x.toMap())),
+      "card_prices": cardPrices == null
+          ? null
+          : List<dynamic>.from(cardPrices!.map((x) => x.toMap())),
+      "atk": atk,
+      "def": def,
+      "level": level,
+      "attribute": attribute,
+      "banlist_info": banlistInfo == null ? null : banlistInfo!.toMap(),
+    };
+  }
+}
+
+class BanlistInfo {
+  BanlistInfo({
+    this.banTcg,
+    this.banOcg,
+  });
+
+  String? banTcg;
+  String? banOcg;
+
+  factory BanlistInfo.fromJson(String str) {
+    return BanlistInfo.fromMap(json.decode(str));
+  }
+
+  String toJson() {
+    return json.encode(toMap());
+  }
+
+  factory BanlistInfo.fromMap(Map<String, dynamic> json) {
+    return BanlistInfo(
+      banTcg: json["ban_tcg"],
+      banOcg: json["ban_ocg"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "ban_tcg": banTcg,
+      "ban_ocg": banOcg,
+    };
+  }
 }
 
 class CardImage {
-  int id;
-  String imageUrl;
-  String imageUrlSmall;
-
   CardImage({
     this.id,
     this.imageUrl,
     this.imageUrlSmall,
   });
 
-  factory CardImage.fromJson(String str) => CardImage.fromMap(json.decode(str));
+  int? id;
+  String? imageUrl;
+  String? imageUrlSmall;
 
-  String toJson() => json.encode(toMap());
+  factory CardImage.fromJson(String str) {
+    return CardImage.fromMap(json.decode(str));
+  }
 
-  factory CardImage.fromMap(Map<String, dynamic> json) => CardImage(
-    id: json["id"],
-    imageUrl: json["image_url"],
-    imageUrlSmall: json["image_url_small"],
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "id": id,
-    "image_url": imageUrl,
-    "image_url_small": imageUrlSmall,
-  };
+  factory CardImage.fromMap(Map<String, dynamic> json) {
+    return CardImage(
+      id: json["id"],
+      imageUrl: json["image_url"],
+      imageUrlSmall: json["image_url_small"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "id": id,
+      "image_url": imageUrl,
+      "image_url_small": imageUrlSmall,
+    };
+  }
 }
 
 class CardPrice {
-  String cardMarketPrice;
-  String tcgPlayerPrice;
-  String ebayPrice;
-  String amazonPrice;
-  String coolStuffincPrice;
-
   CardPrice({
-    this.cardMarketPrice,
-    this.tcgPlayerPrice,
+    this.cardmarketPrice,
+    this.tcgplayerPrice,
     this.ebayPrice,
     this.amazonPrice,
-    this.coolStuffincPrice,
+    this.coolstuffincPrice,
   });
 
-  factory CardPrice.fromJson(String str) => CardPrice.fromMap(json.decode(str));
+  String? cardmarketPrice;
+  String? tcgplayerPrice;
+  String? ebayPrice;
+  String? amazonPrice;
+  String? coolstuffincPrice;
 
-  String toJson() => json.encode(toMap());
+  factory CardPrice.fromJson(String str) {
+    return CardPrice.fromMap(json.decode(str));
+  }
 
-  factory CardPrice.fromMap(Map<String, dynamic> json) => CardPrice(
-    cardMarketPrice: json["cardmarket_price"],
-    tcgPlayerPrice: json["tcgplayer_price"],
-    ebayPrice: json["ebay_price"],
-    amazonPrice: json["amazon_price"],
-    coolStuffincPrice: json["coolstuffinc_price"],
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "cardmarket_price": cardMarketPrice,
-    "tcgplayer_price": tcgPlayerPrice,
-    "ebay_price": ebayPrice,
-    "amazon_price": amazonPrice,
-    "coolstuffinc_price": coolStuffincPrice,
-  };
+  factory CardPrice.fromMap(Map<String, dynamic> json) {
+    return CardPrice(
+      cardmarketPrice: json["cardmarket_price"],
+      tcgplayerPrice: json["tcgplayer_price"],
+      ebayPrice: json["ebay_price"],
+      amazonPrice: json["amazon_price"],
+      coolstuffincPrice: json["coolstuffinc_price"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "cardmarket_price": cardmarketPrice,
+      "tcgplayer_price": tcgplayerPrice,
+      "ebay_price": ebayPrice,
+      "amazon_price": amazonPrice,
+      "coolstuffinc_price": coolstuffincPrice,
+    };
+  }
 }
 
 class CardSet {
-  String setName;
-  String setCode;
-  String setRarity;
-  String setRarityCode;
-  String setPrice;
-
   CardSet({
     this.setName,
     this.setCode,
@@ -171,75 +255,89 @@ class CardSet {
     this.setPrice,
   });
 
-  factory CardSet.fromJson(String str) => CardSet.fromMap(json.decode(str));
+  String? setName;
+  String? setCode;
+  String? setRarity;
+  String? setRarityCode;
+  String? setPrice;
 
-  String toJson() => json.encode(toMap());
+  factory CardSet.fromJson(String str) {
+    return CardSet.fromMap(json.decode(str));
+  }
 
-  factory CardSet.fromMap(Map<String, dynamic> json) => CardSet(
-    setName: json["set_name"],
-    setCode: json["set_code"],
-    setRarity: json["set_rarity"],
-    setRarityCode: json["set_rarity_code"],
-    setPrice: json["set_price"],
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "set_name": setName,
-    "set_code": setCode,
-    "set_rarity": setRarity,
-    "set_rarity_code": setRarityCode,
-    "set_price": setPrice,
-  };
+  factory CardSet.fromMap(Map<String, dynamic> json) {
+    return CardSet(
+      setName: json["set_name"],
+      setCode: json["set_code"],
+      setRarity: json["set_rarity"],
+      setRarityCode: json["set_rarity_code"],
+      setPrice: json["set_price"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "set_name": setName,
+      "set_code": setCode,
+      "set_rarity": setRarity,
+      "set_rarity_code": setRarityCode,
+      "set_price": setPrice,
+    };
+  }
 }
 
 class Meta {
-  int currentRows;
-  int totalRows;
-  int rowsRemaining;
-  int totalPages;
-  int pagesRemaining;
-  String previousPage;
-  int previousPageOffset;
-  String nextPage;
-  int nextPageOffset;
-
   Meta({
     this.currentRows,
     this.totalRows,
     this.rowsRemaining,
     this.totalPages,
     this.pagesRemaining,
-    this.previousPage,
-    this.previousPageOffset,
     this.nextPage,
     this.nextPageOffset,
   });
 
-  factory Meta.fromJson(String str) => Meta.fromMap(json.decode(str));
+  int? currentRows;
+  int? totalRows;
+  int? rowsRemaining;
+  int? totalPages;
+  int? pagesRemaining;
+  String? nextPage;
+  int? nextPageOffset;
 
-  String toJson() => json.encode(toMap());
+  factory Meta.fromJson(String str) {
+    return Meta.fromMap(json.decode(str));
+  }
 
-  factory Meta.fromMap(Map<String, dynamic> json) => Meta(
-    currentRows: json["current_rows"],
-    totalRows: json["total_rows"],
-    rowsRemaining: json["rows_remaining"],
-    totalPages: json["total_pages"],
-    pagesRemaining: json["pages_remaining"],
-    previousPage: json["previous_page"],
-    previousPageOffset: json["previous_page_offset"],
-    nextPage: json["next_page"],
-    nextPageOffset: json["next_page_offset"],
-  );
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  Map<String, dynamic> toMap() => {
-    "current_rows": currentRows,
-    "total_rows": totalRows,
-    "rows_remaining": rowsRemaining,
-    "total_pages": totalPages,
-    "pages_remaining": pagesRemaining,
-    "previous_page": previousPage,
-    "previous_page_offset": previousPageOffset,
-    "next_page": nextPage,
-    "next_page_offset": nextPageOffset,
-  };
+  factory Meta.fromMap(Map<String, dynamic> json) {
+    return Meta(
+      currentRows: json["current_rows"],
+      totalRows: json["total_rows"],
+      rowsRemaining: json["rows_remaining"],
+      totalPages: json["total_pages"],
+      pagesRemaining: json["pages_remaining"],
+      nextPage: json["next_page"],
+      nextPageOffset: json["next_page_offset"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "current_rows": currentRows,
+      "total_rows": totalRows,
+      "rows_remaining": rowsRemaining,
+      "total_pages": totalPages,
+      "pages_remaining": pagesRemaining,
+      "next_page": nextPage,
+      "next_page_offset": nextPageOffset,
+    };
+  }
 }

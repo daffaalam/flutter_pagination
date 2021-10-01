@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../config/constant.dart';
+import '../common/constant.dart';
 import '../model/yu_gi_oh.dart';
 
 class ApiClient {
@@ -10,19 +10,22 @@ class ApiClient {
     ),
   );
 
-  static Future<YuGiOh> getCardInfo({int count, int offset}) async {
+  static Future<YuGiOh?> getCardInfo({
+    required int count,
+    required int offset,
+  }) async {
     try {
       Response<Map<String, dynamic>> _response;
       _response = await _dio.get<Map<String, dynamic>>(
-        "/cardinfo.php",
+        '/cardinfo.php',
         queryParameters: <String, dynamic>{
-          "num": count,
-          "offset": offset,
+          'num': count,
+          'offset': offset,
         },
       );
-      return YuGiOh.fromMap(_response.data);
+      return YuGiOh.fromMap(_response.data ?? <String, dynamic>{});
     } catch (e) {
-      throw "$e";
+      return null;
     }
   }
 }
